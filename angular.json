@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "mf-angular"
+    }
+  },
+  "defaultProject": "mf-angular",
+  "cli": {
+    "analytics": false
+  }
 }
