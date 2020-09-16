@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { IframeService } from '../../iframe.service';
 
 @Component({
-  selector: 'app-main',
+  selector: 'mf-angular-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
