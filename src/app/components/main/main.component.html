@@ -1,5 +1,7 @@
 <h1>Counter: {{ counter$ | async }}</h1>
 <button (click)="shellAdd()">Shell Add</button>
-<button (click)="shellSubstract()">Shell Substract</button>
+<button (click)="shellSubtract()">Shell Subtract</button>
 <button (click)="add()">Local Add</button>
-<button (click)="substract()">Local Substract</button>
+<button (click)="subtract()">Local Subtract</button>
+
+<h1 *ngIf="customProp1">Single spa properties: {{ customProp1 }}</h1>

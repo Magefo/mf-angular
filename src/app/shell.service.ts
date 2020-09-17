@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-const shellOrigin = 'http://localhost:4000';
-
 @Injectable({
   providedIn: 'root',
 })
-export class IframeService {
+export class ShellService {
   counter$: Observable<number>;
   private counterSubject$: BehaviorSubject<number>;
+
+  private addEvent = new CustomEvent<any>('mf-angular-event', {
+    detail: { event: 'add' },
+  });
+
+  private subtractEvent = new CustomEvent<any>('mf-angular-event', {
+    detail: { event: 'subtract' },
+  });
 
   constructor() {
     this.counterSubject$ = new BehaviorSubject(1);
@@ -33,31 +39,18 @@ export class IframeService {
   }
 
   shellAdd(): void {
-    if (window.parent) {
-      window.parent.postMessage(
-        { app: 'MF_ANGULAR', event: 'add' },
-        shellOrigin
-      );
-    }
+    window.dispatchEvent(this.addEvent);
   }
 
   shellSubtract(): void {
-    if (window.parent) {
-      window.parent.postMessage(
-        { app: 'MF_ANGULAR', event: 'subtract' },
-        shellOrigin
-      );
-    }
+    window.dispatchEvent(this.subtractEvent);
   }
 
   shellListener(): Observable<any> {
     return new Observable((observer) => {
-      window.addEventListener('message', ({ origin, data }) => {
-        if (origin !== 'http://localhost:4000') {
-          return;
-        }
-        return observer.next(data);
-      });
+      window.addEventListener('mf-shell-event', (event: any) =>
+        observer.next(event.detail)
+      );
     });
   }
 }

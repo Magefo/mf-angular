@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IframeService } from '../../iframe.service';
+import { ShellService } from '../../shell.service';
+import { singleSpaPropsSubject } from 'src/single-spa/single-spa-props';
 
 @Component({
   selector: 'mf-angular-main',
@@ -9,26 +11,41 @@ import { IframeService } from '../../iframe.service';
 })
 export class MainComponent implements OnInit {
   counter$: Observable<number>;
+  customProp1: string;
 
-  constructor(private iframeService: IframeService) {}
+  shell;
+
+  constructor(
+    private iframeService: IframeService,
+    private shellService: ShellService,
+    private ref: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.shell = this.iframeService;
     this.counter$ = this.iframeService.counter$;
+    singleSpaPropsSubject.subscribe((props) => {
+      this.shell = this.shellService;
+      this.counter$ = this.shellService.counter$;
+
+      this.customProp1 = props.customProp1;
+      this.ref.detectChanges();
+    });
   }
 
   shellAdd(): void {
-    this.iframeService.shellAdd();
+    this.shell.shellAdd();
   }
 
-  shellSubstract(): void {
-    this.iframeService.shellSubstract();
+  shellSubtract(): void {
+    this.shell.shellSubtract();
   }
 
   add(): void {
-    this.iframeService.add();
+    this.shell.add();
   }
 
-  substract(): void {
-    this.iframeService.substract();
+  subtract(): void {
+    this.shell.subtract();
   }
 }
