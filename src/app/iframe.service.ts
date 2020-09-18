@@ -53,7 +53,7 @@ export class IframeService {
   shellListener(): Observable<any> {
     return new Observable((observer) => {
       window.addEventListener('message', ({ origin, data }) => {
-        if (origin !== 'http://localhost:4000') {
+        if (origin !== shellOrigin) {
           return;
         }
         return observer.next(data);
